@@ -1,8 +1,8 @@
 import slowclap as sc
 import requests
 
-def getActivated():
-	resp = requests.get("http://projects.danjscott.co.uk/intheroom/isActivated")
+def getActivated(headers):
+	resp = requests.get("http://projects.danjscott.co.uk/intheroom/isActivated", headers=headers)
 	if resp.status_code == 200:
 		return True;
 	else:
@@ -13,7 +13,12 @@ deactivateUrl = "http://projects.danjscott.co.uk/intheroom/Deactivate"
 
 activateUrl = "http://projects.danjscott.co.uk/intheroom/Activate"
 
-activated = getActivated()
+token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiYWRtaW4iLCJwYXNzIjoiYWRtaW4iLCJpYXQiOjE1NTQzMzE3NDYsImV4cCI6MS4wMDAwMDAwMDAwMDE1NTQ1ZSsyMX0.qzxBdYfCGxcvQkhaCBsKiC7DVVG0wOZMe68axjw0x5M"
+headers = {'x-access-token': token}
+
+activated = getActivated(headers)
+
+
 
 
 if __name__ == '__main__':
@@ -29,7 +34,7 @@ if __name__ == '__main__':
 		for clap in detector:
 			print("Clap Detected")
 			if (activated):
-				resp = requests.put(deactivateUrl)
+				resp = requests.put(deactivateUrl, headers=headers)
 				if resp.status_code == 200:
 					print("PyBot Deactivated")
 					activated = False;
@@ -38,7 +43,7 @@ if __name__ == '__main__':
 
 
 			else:
-				resp = requests.put(activateUrl)
+				resp = requests.put(activateUrl, headers=headers)
 				if resp.status_code == 200:
 					print("PyBot Activated")
 					activated = True;
